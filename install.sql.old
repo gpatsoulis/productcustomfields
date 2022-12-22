@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS `DBNAME_`.`product_custom_fields` (
+ id_pcf INT AUTO_INCREMENT,
+ id_product INT UNSIGNED NOT NULL,
+ 
+ custom_field_a VARCHAR(4000) default '',
+ custom_field_b VARCHAR(4000) default '',
+ custom_field_c VARCHAR(4000) default '',
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+ PRIMARY KEY (id_pcf),
+ UNIQUE (id_product),
+ CONSTRAINT fk_product FOREIGN key (id_product) REFERENCES `DBNAME_`.`product`(id_product) ON DELETE CASCADE,
+) 
+ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';

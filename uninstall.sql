@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `DBNAME_`.`product_custom_fields`;
