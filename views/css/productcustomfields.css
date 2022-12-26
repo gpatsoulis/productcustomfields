@@ -16,14 +16,7 @@
     flex-grow: 1;
 }
 
-@media (max-width: 1024px){
-    .hide-on-tablet {
-        display:none;
-    }
-}
-@media (max-width: 500px){
-    .hide-on-mobile {
-        display:none;
-    }
+.hide {
+    display:none;
 }
 

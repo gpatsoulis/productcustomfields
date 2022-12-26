@@ -110,20 +110,21 @@ class ProductCustomFields extends Module
 
         $id_pcf = null;
         if( isset($data[0]) &&  !empty($data[0]) ){
-            $id_pcf = $data[0]['id_pcf'];
+            $id_pcf = (int) $data[0]['id_pcf'];
         }
 
-        $field_a = Tools::getValue('product_custom_field_a');
-        $field_b = Tools::getValue('product_custom_field_b');
-        $field_c = Tools::getValue('product_custom_field_c');
+        $pcf = new ProductCustomField();
+        $pcf->id_pcf = $id_pcf;
+        $pcf->id_product = $id_product;
 
+        $pcf->custom_field_a = Tools::getValue('product_custom_field_a');
+        $pcf->custom_field_b = Tools::getValue('product_custom_field_b');
+        $pcf->custom_field_c = Tools::getValue('product_custom_field_c');
         
-
         try{
-            $this->saveProductCustomFields( $id_product, $field_a, $field_b, $field_c, $id_pcf);
+            $pcf->save();
         } catch( PrestaShopDatabaseException $ex ){
             $ex->displayMessage();
-            //echo ($ex->getMessage());
             $this->context->smarty->assign('pcf_add_new_field', 'error');
         }
 
@@ -145,37 +146,39 @@ class ProductCustomFields extends Module
 
         $this->context->smarty->assign('product', $this->product);
         
+        
+        switch ( $this->context->getDevice() ){
+            case 1:
+                $device = 'computer';
+                break;
+            case 2:
+                $device = 'tablet';
+                break;
+            case 4:
+                $device = 'mobile';
+                break;
+            default:
+                $device = 'computer';
+        }
+
+        $this->context->smarty->assign('device', $device);
     
         return $this->display(__FILE__, 'fields.tpl');
     }
 
+    //display tab in admin product
     public function hookDisplayAdminProductsExtra($params){
 
         $id_product = (int)Tools::getValue('id_product');
        
         
-        $data = ProductCustomField::getCustomProductTabsByProductID($id_product);      
+        $data = ProductCustomField::getCustomProductTabsByProductID($id_product);   
 
-        $this->context->smarty->assign('pcf', $data[0]);
+        if(isset($data[0])){
+            $this->context->smarty->assign('pcf', $data[0]);
+        }
+
         return $this->display(__FILE__, 'productcustomfields.tpl');
-    }
-
-    
-    public function saveProductCustomFields(int $id_product,string $field_a,string $field_b,string $field_c,$id_pcf = null){
-
-        $pcf = new ProductCustomField();
-
-        $pcf->id_pcf = $id_pcf;
-        
-        $pcf->id_product = $id_product;
-        
-        
-        
-        $pcf->custom_field_a = $field_a; 
-        $pcf->custom_field_b = $field_b; 
-        $pcf->custom_field_c = $field_c;
-        
-        $pcf->save();
     }
 
     public function run_sql_queries(string $path = self::INSTALL_SQL_FILE):bool

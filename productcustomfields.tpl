@@ -1,3 +1,8 @@
+{if isset($pcf_add_new_field) && $pcf_add_new_field == $error }
+<div>
+    <h3 style='color:red'>Something went wrong, try again later!</h3>
+</div>
+{/if}
 
 <div id="product-custom-field" class="panel product-tab">
     <input type="hidden" name="submitted_tabs[]" value="productcustomfields" />

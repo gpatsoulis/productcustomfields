@@ -75,7 +75,7 @@ class ProductCustomField extends ObjectModel {
         $this->clearCache();
 
         // Database update
-        if (!$result = Db::getInstance()->update($this->def['table'], $this->getFields(), '`'.pSQL($this->def['primary']).'` = '.(int)$this->id, 0, $null_values)) {
+        if (!$result = Db::getInstance()->update($this->def['table'], $this->getFields(), '`'.pSQL($this->def['primary']).'` = '.(int)$this->id_pcf, 0, $null_values)) {
             return false;
         }
 
