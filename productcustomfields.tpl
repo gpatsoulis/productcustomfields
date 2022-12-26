@@ -5,43 +5,43 @@
 
     <div class="form-group">
         <div class="col-lg-12">
-        <label class="control-label col-lg-3" for="product_custom_fields">
+        <label class="control-label col-lg-3" for="product_custom_field_a">
             <span class="label-tooltip" data-toggle="tooltip" title="{l s='Custom string 1'}">
                 {l s='Custom string 1'}
             </span>
         </label>
         <div class="col-lg-5">
-            <input type="text" id="product_custom_fields" name="product_custom_fields" value="{$custom_filds}"> 
+            <input type="text" id="product_custom_fields" name="product_custom_field_a" value="{$pcf.custom_field_a}"> 
         </div>
         </div>
     </div>
- {* 
+ 
     <div class="form-group">
         <div class="col-lg-12">
-        <label class="control-label col-lg-3" for="product_custom_fields_2">
+        <label class="control-label col-lg-3" for="product_custom_field_b">
             <span class="label-tooltip" data-toggle="tooltip" title="{l s='Custom string 2'}">
                 {l s='Custom string 2'}
             </span>
         </label>
         <div class="col-lg-5">
-            <input type="text" id="product_custom_fields_2" name="product_custom_fields_2" value="{l s='Test 2'}"> 
+            <input type="text" id="product_custom_fields_2" name="product_custom_field_b" value="{$pcf.custom_field_b}"> 
         </div>
         </div>
     </div>
 
     <div class="form-group">
         <div class="col-lg-12">
-        <label class="control-label col-lg-3" for="product_custom_fields_3">
+        <label class="control-label col-lg-3" for="product_custom_field_c">
             <span class="label-tooltip" data-toggle="tooltip" title="{l s='Custom string 3'}">
                 {l s='Custom string 3'}
             </span>
         </label>
         <div class="col-lg-5">
-            <input type="text" id="product_custom_fields_3" name="product_custom_fields_3" value="{$product->product_custom_fields}"> 
+            <input type="text" id="product_custom_fields_3" name="product_custom_field_c" value="{$pcf.custom_field_c}"> 
         </div>
         </div>
     </div>
-    *}
+ 
     
 
     <div class="panel-footer">

@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS `DBNAME_`.`product_custom_fields`;
+DROP TABLE IF EXISTS `PREFIX_product_custom_fields`;

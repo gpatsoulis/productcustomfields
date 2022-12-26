@@ -1,0 +1,15 @@
+/*
+    Block pcf
+        Element column
+
+*/
+.pcf-component {
+    display: flex;
+}
+
+.pcf-component__column-item {
+    display:block;
+    min-width: 320px;
+    padding: 2em;
+}
+
