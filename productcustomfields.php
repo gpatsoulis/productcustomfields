@@ -137,11 +137,15 @@ class ProductCustomFields extends Module
         $this->product = new Product((int)$id_product);
 
         $data = ProductCustomField::getCustomProductTabsByProductID($id_product);  
+    
+        if(isset($data[0])){
+            $this->context->smarty->assign('pcf', $data[0]);
+            $this->context->controller->addCSS($this->_path.'views/css/productcustomfields.css');
+        }
 
         $this->context->smarty->assign('product', $this->product);
-        $this->context->smarty->assign('pcf', $data[0]);
         
-        
+    
         return $this->display(__FILE__, 'fields.tpl');
     }
 
