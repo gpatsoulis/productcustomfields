@@ -106,14 +106,12 @@ class ProductCustomFields extends Module
         
             
         $id_product = (int)Tools::getValue('id_product');
-        $data = $this->getProductCustomFieldsByProductID($id_product);
+        $data = ProductCustomField::getCustomProductTabsByProductID($id_product);
 
         $id_pcf = null;
         if( isset($data[0]) &&  !empty($data[0]) ){
             $id_pcf = $data[0]['id_pcf'];
         }
-
-        var_dump($id_pcf);
 
         $field_a = Tools::getValue('product_custom_field_a');
         $field_b = Tools::getValue('product_custom_field_b');
@@ -138,12 +136,13 @@ class ProductCustomFields extends Module
         $id_product = (int)Tools::getValue('id_product');
         $this->product = new Product((int)$id_product);
 
-        var_dump(  $this->product->name[1] );
+        $data = ProductCustomField::getCustomProductTabsByProductID($id_product);  
 
         $this->context->smarty->assign('product', $this->product);
+        $this->context->smarty->assign('pcf', $data[0]);
+        
         
         return $this->display(__FILE__, 'fields.tpl');
-        //return 'hello';
     }
 
     public function hookDisplayAdminProductsExtra($params){
@@ -151,14 +150,10 @@ class ProductCustomFields extends Module
         $id_product = (int)Tools::getValue('id_product');
        
         
-        $data = $this->getProductCustomFieldsByProductID($id_product);        
+        $data = ProductCustomField::getCustomProductTabsByProductID($id_product);      
 
         $this->context->smarty->assign('pcf', $data[0]);
         return $this->display(__FILE__, 'productcustomfields.tpl');
-    }
-
-    public function adminFormSubmited(){
-
     }
 
     
@@ -167,9 +162,9 @@ class ProductCustomFields extends Module
         $pcf = new ProductCustomField();
 
         $pcf->id_pcf = $id_pcf;
-        if(!$id_pcf){
-            $pcf->id_product = $id_product;
-        }
+        
+        $pcf->id_product = $id_product;
+        
         
         
         $pcf->custom_field_a = $field_a; 
@@ -177,58 +172,6 @@ class ProductCustomFields extends Module
         $pcf->custom_field_c = $field_c;
         
         $pcf->save();
-    }
-
-    /*
-    public function hookActionProductUpdate($params){
-        $product = $params['product'];
-        //var_dump(Validate::isLoadedObject($product));
-        if(Validate::isLoadedObject($product)){
-            //$product->save();
-        }
-        
-    }
-
-    public function hookDisplayAdminProductsExtra($params)
-    {
-
-      
-        //var_dump($params);
-       
-        $product = new Product((int) Tools::getValue('id_product'));
-
-        var_dump($params);exit;
-        $pcf = CustomFields::getCustomProductTabsByProductID( $product->reference );
-        if(!$pcf){
-            $pcf = array();
-        }
-
-        //$product->get_def();
-        //var_dump($product->product_custom_fields);
-        //var_dump($product->name);
-        //var_dump(Hook::getHookModuleExecList('displayAdminProductsExtra'));
-
-        if (Validate::isLoadedObject($product)) {
-            $this->context->smarty->assign(array('custom_fields' => $pcf));
-            return $this->display(__FILE__, 'productcustomfields.tpl');
-        }
-    }
-
-    public function hookDisplayProductTabContent($param){
-        return 'Hello from displayProductTabContent Hook';
-    }
-*/
-    public function getProductCustomFieldsByProductID( $id_product ){
-
-        $prefix = _DB_PREFIX_;
-        $query = <<<SQL
-        SELECT * 
-        FROM `{$prefix}product_custom_fields` 
-        WHERE id_product='{$id_product}'; 
-        SQL;
-
-        return Db::getInstance()->executeS($query);
-
     }
 
     public function run_sql_queries(string $path = self::INSTALL_SQL_FILE):bool

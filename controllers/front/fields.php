@@ -12,7 +12,13 @@ class ProductCustomFieldsFieldsModuleFrontController extends ModuleFrontControll
 
         var_dump(  $this->product->name[1] );
 
+        $data = ProductCustomField::getCustomProductTabsByProductID($id_product);
+        $this->context->smarty->assign('pcf', $data);
+
+
+
         $this->context->smarty->assign('product', $this->product);
+      
         $this->setTemplate('fields.tpl');
     }
 

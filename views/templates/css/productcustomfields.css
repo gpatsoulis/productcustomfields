@@ -4,12 +4,26 @@
 
 */
 .pcf-component {
+    width: 100%;
     display: flex;
+    gap: 10px;
 }
 
 .pcf-component__column-item {
     display:block;
-    min-width: 320px;
     padding: 2em;
+    border: 1px solid grey;
+    flex-grow: 1;
+}
+
+@media (max-width: 1024px){
+    .hide-on-tablet {
+        display:none;
+    }
+}
+@media (max-width: 500px){
+    .hide-on-mobile {
+        display:none;
+    }
 }
 
