@@ -10,4 +10,4 @@ PrestaShop Demo Module
 ## Hooks 
 - displayAdminProductsExtra
 - displayProductTabContent
-- displayProductTabContent
+- actionProductUpdate
