@@ -9,8 +9,8 @@ require_once __DIR__ . '/classes/ProductCustomField.php';
 class ProductCustomFields extends Module
 {
 
-    const INSTALL_SQL_FILE = 'install.sql';
-    const UNINSTALL_SQL_FILE = 'uninstall.sql';
+    const INSTALL_SQL_FILE = 'sql/install.sql';
+    const UNINSTALL_SQL_FILE = 'sql/uninstall.sql';
 
     protected $hooks = array();
 
