@@ -1,14 +1,14 @@
 <?php
 
-
-class ProductCustomField extends ObjectModel {
+class ProductCustomField extends ObjectModel
+{
     public $id_pcf;
     public $id_product;
     public $custom_field_a;
     public $custom_field_b;
     public $custom_field_c;
     public $created_at;
-    
+
     public static $definition = array(
         'table' => 'product_custom_fields',
         'primary' => 'id_pcf',
@@ -16,36 +16,36 @@ class ProductCustomField extends ObjectModel {
 
         'fields' => array(
             'id_product' => array('type' => self::TYPE_INT),
-            'custom_field_a' => array( 'type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'custom_field_b' => array( 'type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'custom_field_c' => array( 'type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'custom_field_a' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'custom_field_b' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'custom_field_c' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
             'created_at' => array('type' => self::TYPE_DATE),
-        )
+        ),
     );
 
-    public static function getProductCustomFieldsByProductID( $id_product ):array
+    public static function getProductCustomFieldsByProductID($id_product): ProductCustomField
     {
         $prefix = _DB_PREFIX_;
+
         $query = <<<SQL
-        SELECT * 
-        FROM `{$prefix}product_custom_fields` 
-        WHERE id_product='{$id_product}'; 
+        SELECT `id_pcf`
+        FROM `{$prefix}product_custom_fields`
+        WHERE id_product='{$id_product}';
         SQL;
 
-        //Executes (executeS) return the result of $sql as array
-        return Db::getInstance()->executeS($query);
+        return new ProductCustomField(Db::getInstance()->getValue($query));
     }
 
-    public function save($null_values = false, $auto_date = true):bool
+    public function save($null_values = false, $auto_date = true): bool
     {
 
-        if(isset($this->id_pcf)){
+        if (isset($this->id_pcf)) {
             return $this->update($null_values);
         }
         return $this->add($auto_date, $null_values);
     }
 
-    public function add($auto_date = true, $null_values = false):bool
+    public function add($auto_date = true, $null_values = false): bool
     {
 
         if ($auto_date && property_exists($this, 'created_at')) {
@@ -63,7 +63,7 @@ class ProductCustomField extends ObjectModel {
         return $result;
     }
 
-    public function update($null_values = false):bool
+    public function update($null_values = false): bool
     {
         $this->clearCache();
 
@@ -73,17 +73,16 @@ class ProductCustomField extends ObjectModel {
             if (isset($this->update_fields) && is_array($this->update_fields) && count($this->update_fields)) {
                 $this->update_fields['created_at'] = true;
             }
-        }else{
+        } else {
             $this->update_fields['created_at'] = false;
         }
 
         // Database update
-        if (!$result = Db::getInstance()->update($this->def['table'], $this->getFields(), '`'.pSQL($this->def['primary']).'` = '.(int)$this->id_pcf, 0, $null_values)) {
+        if (!$result = Db::getInstance()->update($this->def['table'], $this->getFields(), '`' . pSQL($this->def['primary']) . '` = ' . (int) $this->id_pcf, 0, $null_values)) {
             return false;
         }
 
         return $result;
     }
-
 
 }

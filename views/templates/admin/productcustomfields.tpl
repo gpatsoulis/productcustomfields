@@ -5,6 +5,7 @@
 {/if}
 
 <div id="product-custom-field" class="panel product-tab">
+
     <input type="hidden" name="submitted_tabs[]" value="productcustomfields" />
     <h3 class="tab"><i class="icon-info"></i> {l s='Product Custom Fields'}</h3> 
 
@@ -16,7 +17,7 @@
             </span>
         </label>
         <div class="col-lg-5">
-            <input type="text" id="product_custom_fields" name="product_custom_field_a" value="{$pcf.custom_field_a}"> 
+            <input type="text" id="product_custom_fields" name="product_custom_field_a" value="{$pcf->custom_field_a}"> 
         </div>
         </div>
     </div>
@@ -29,7 +30,7 @@
             </span>
         </label>
         <div class="col-lg-5">
-            <input type="text" id="product_custom_fields_2" name="product_custom_field_b" value="{$pcf.custom_field_b}"> 
+            <input type="text" id="product_custom_fields_2" name="product_custom_field_b" value="{$pcf->custom_field_b}"> 
         </div>
         </div>
     </div>
@@ -42,7 +43,7 @@
             </span>
         </label>
         <div class="col-lg-5">
-            <input type="text" id="product_custom_fields_3" name="product_custom_field_c" value="{$pcf.custom_field_c}"> 
+            <input type="text" id="product_custom_fields_3" name="product_custom_field_c" value="{$pcf->custom_field_c}"> 
         </div>
         </div>
     </div>

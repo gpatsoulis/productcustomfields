@@ -32,10 +32,10 @@ class ProductCustomFields extends Module
         $this->description = $this->l('Add 3 new text custom fields in product tab');
     }
 
-    public function install():bool
+    public function install(): bool
     {
 
-        if (!parent::install() ) {
+        if (!parent::install()) {
             return false;
         }
 
@@ -44,14 +44,14 @@ class ProductCustomFields extends Module
         }
 
         $this->setHooks();
-        if(!$this->registerHooks($this->hooks)){
+        if (!$this->registerHooks($this->hooks)) {
             return false;
         }
-       
+
         return true;
     }
 
-    public function uninstall():bool
+    public function uninstall(): bool
     {
 
         if (!parent::uninstall()) {
@@ -62,35 +62,38 @@ class ProductCustomFields extends Module
             return false;
         }
 
-        if(!$this->unregisterHooks($this->hooks)){
+        if (!$this->unregisterHooks($this->hooks)) {
             return false;
         }
 
         return true;
     }
 
-    public function registerHooks(array $hooks):bool
+    public function registerHooks(array $hooks): bool
     {
-        
+
         foreach ($hooks as $hook) {
-            if(!$this->registerHook($hook)){
+            if (!$this->registerHook($hook)) {
                 return false;
-            } 
+            }
         }
 
         return true;
     }
 
-    public function unregisterHooks(array $hooks):bool
+    public function unregisterHooks(array $hooks): bool
     {
         foreach ($hooks as $hook) {
-            if(!$this->unregisterHook($hook)) return false;
+            if (!$this->unregisterHook($hook)) {
+                return false;
+            }
+
         }
 
         return true;
     }
 
-    public function setHooks():array
+    public function setHooks(): array
     {
         $this->hooks = array(
             'displayAdminProductsExtra',
@@ -101,33 +104,28 @@ class ProductCustomFields extends Module
         return $this->hooks;
     }
 
-    public function HookActionProductUpdate($params):void
+    public function HookActionProductUpdate($params): void
     {
-           
-        $id_product = (int)Tools::getValue('id_product');
 
-        if(!$id_product){
+        $id_product = (int) Tools::getValue('id_product');
+
+        if (!$id_product) {
             return;
         }
 
-        $data = ProductCustomField::getProductCustomFieldsByProductID($id_product);
+        $pcf = ProductCustomField::getProductCustomFieldsByProductID($id_product);
 
-        $pcf = new ProductCustomField();
-
-        if ( isset($data[0]) &&  !empty($data[0]) ){
-            $pcf->id_pcf = (int) $data[0]['id_pcf'];
-            $pcf->created_at = $data[0]['created_at'];
+        if (!$pcf->id_product) {
+            $pcf->id_product = $id_product;
         }
-
-        $pcf->id_product = $id_product;
 
         $pcf->custom_field_a = Tools::getValue('product_custom_field_a');
         $pcf->custom_field_b = Tools::getValue('product_custom_field_b');
         $pcf->custom_field_c = Tools::getValue('product_custom_field_c');
-        
+
         try {
             $pcf->save();
-        } catch ( PrestaShopDatabaseException $ex ){
+        } catch (PrestaShopDatabaseException $ex) {
             $ex->displayMessage();
             $this->context->smarty->assign('pcf_add_new_field', 'error');
         }
@@ -135,43 +133,41 @@ class ProductCustomFields extends Module
     }
 
     //display content in fronend
-    public function hookDisplayProductTabContent($params):string
+    public function hookDisplayProductTabContent($params): string
     {
-        
-        $id_product = (int)Tools::getValue('id_product');
-        $data = ProductCustomField::getProductCustomFieldsByProductID($id_product);  
-    
-        if (isset($data[0]) && !empty($data[0])){
-            $this->context->smarty->assign('pcf', $data[0]);
-            $this->context->controller->addCSS($this->_path.'views/css/productcustomfields.css');
+
+        $id_product = (int) Tools::getValue('id_product');
+        $pcf = ProductCustomField::getProductCustomFieldsByProductID($id_product);
+
+        if ($pcf->id_pcf) {
+            $this->context->smarty->assign('pcf', $pcf);
+            $this->context->controller->addCSS($this->_path . 'views/css/productcustomfields.css');
         }
 
         $this->context->smarty->assign('device', $this->getDevice());
-    
+
         return $this->display(__FILE__, 'fields.tpl');
     }
 
     //display tab in admin product
-    public function hookDisplayAdminProductsExtra($params):string
+    public function hookDisplayAdminProductsExtra($params): string
     {
 
-        $id_product = (int)Tools::getValue('id_product');
-        if (!$id_product){
-            return 'Please select a product!';
+        $id_product = (int) Tools::getValue('id_product');
+        if (!$id_product) {
+            return 'Please select a valid product!';
         }
-        
-        $data = ProductCustomField::getProductCustomFieldsByProductID($id_product);   
 
-        if(isset($data[0])){
-            $this->context->smarty->assign('pcf', $data[0]);
-        }
+        $pcf = ProductCustomField::getProductCustomFieldsByProductID($id_product);
+
+        $this->context->smarty->assign('pcf', $pcf);
 
         return $this->display(__FILE__, 'views/templates/admin/productcustomfields.tpl');
     }
 
-    public function getDevice():string
+    public function getDevice(): string
     {
-        switch ( $this->context->getDevice() ){
+        switch ($this->context->getDevice()) {
             case 1:
                 $device = 'computer';
                 break;
@@ -188,7 +184,7 @@ class ProductCustomFields extends Module
         return $device;
     }
 
-    public function run_sql_queries(string $path = self::INSTALL_SQL_FILE):bool
+    public function run_sql_queries(string $path = self::INSTALL_SQL_FILE): bool
     {
 
         if (!file_exists(dirname(__FILE__) . '/' . $path)) {
@@ -198,7 +194,7 @@ class ProductCustomFields extends Module
         }
 
         //_MYSQL_ENGINE_
-        $sql = str_replace(array('PREFIX_', 'DBNAME_','MYSQL_ENGINE'), array(_DB_PREFIX_, _DB_NAME_,_MYSQL_ENGINE_), $sql);
+        $sql = str_replace(array('PREFIX_', 'DBNAME_', 'MYSQL_ENGINE'), array(_DB_PREFIX_, _DB_NAME_, _MYSQL_ENGINE_), $sql);
         $sql = preg_split("/;\s*[\r\n]+/", $sql);
 
         foreach ($sql as $query) {
