@@ -135,7 +135,7 @@ class ProductCustomFields extends Module
     {
         
         $id_product = (int)Tools::getValue('id_product');
-        $this->product = new Product((int)$id_product);
+        //$this->product = new Product((int)$id_product);
 
         $data = ProductCustomField::getCustomProductTabsByProductID($id_product);  
     
@@ -144,7 +144,7 @@ class ProductCustomFields extends Module
             $this->context->controller->addCSS($this->_path.'views/css/productcustomfields.css');
         }
 
-        $this->context->smarty->assign('product', $this->product);
+        //$this->context->smarty->assign('product', $this->product);
         
         
         switch ( $this->context->getDevice() ){
