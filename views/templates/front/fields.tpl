@@ -1,4 +1,5 @@
 
+{if isset($pcf)}
 <h3> Demo Module - Product Custom Fields</h3>
 <div class='pcf-component'>
     <div class="pcf-component__column-item">{if isset($pcf.custom_field_a)}{$pcf.custom_field_a}{/if}</div>
@@ -9,3 +10,4 @@
         {if isset($pcf.custom_field_c)}{$pcf.custom_field_c}{/if}
     </div>
 </div>
+{else}<!-- Product Custom Fields Module --- no fields available for product -->{/if}

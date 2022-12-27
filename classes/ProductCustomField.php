@@ -23,18 +23,8 @@ class ProductCustomField extends ObjectModel {
         )
     );
 
-    public function __construct($id = null){
-        Shop::addTableAssociation(self::$definition['table'], array('type' => 'shop'));
-        parent::__construct($id);
-    }
-
-    public function setCustomFieldsFromPost($data){
-        foreach( self::$definition[$fields] as $fieldName => $fieldOption ){
-            $this->$fieldName = $data[$fieldName];
-        }
-    }
-
-    public static function getCustomProductTabsByProductID( $id_product ){
+    public static function getProductCustomFieldsByProductID( $id_product ):array
+    {
         $prefix = _DB_PREFIX_;
         $query = <<<SQL
         SELECT * 
@@ -46,7 +36,8 @@ class ProductCustomField extends ObjectModel {
         return Db::getInstance()->executeS($query);
     }
 
-    public function save($null_values = false, $auto_date = true){
+    public function save($null_values = false, $auto_date = true):bool
+    {
 
         if(isset($this->id_pcf)){
             return $this->update($null_values);
@@ -54,7 +45,8 @@ class ProductCustomField extends ObjectModel {
         return $this->add($auto_date, $null_values);
     }
 
-    public function add($auto_date = true, $null_values = false){
+    public function add($auto_date = true, $null_values = false):bool
+    {
 
         if ($auto_date && property_exists($this, 'created_at')) {
             $this->created_at = date('Y-m-d H:i:s');
@@ -71,8 +63,19 @@ class ProductCustomField extends ObjectModel {
         return $result;
     }
 
-    public function update($null_values = false){
+    public function update($null_values = false):bool
+    {
         $this->clearCache();
+
+        // Automatically fill dates
+        if (property_exists($this, 'created_at') && $this->created_at == null) {
+            $this->created_at = date('Y-m-d H:i:s');
+            if (isset($this->update_fields) && is_array($this->update_fields) && count($this->update_fields)) {
+                $this->update_fields['created_at'] = true;
+            }
+        }else{
+            $this->update_fields['created_at'] = false;
+        }
 
         // Database update
         if (!$result = Db::getInstance()->update($this->def['table'], $this->getFields(), '`'.pSQL($this->def['primary']).'` = '.(int)$this->id_pcf, 0, $null_values)) {

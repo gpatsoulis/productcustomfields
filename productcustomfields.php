@@ -5,7 +5,6 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require_once __DIR__ . '/classes/ProductCustomField.php';
-require_once __DIR__ . '/controllers/admin/AdminProductCustomFieldsController.php';
 
 class ProductCustomFields extends Module
 {
@@ -26,7 +25,7 @@ class ProductCustomFields extends Module
         $this->ps_version_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
         $this->bootstrap = true;
 
-        //parent's constructo - after the creation of $this->name and before any use of the $this->l() method
+        //parent's constructor - after the creation of $this->name and before any use of the $this->l() method
         parent::__construct();
 
         $this->displayName = $this->l('Product Custom Fields');
@@ -102,19 +101,24 @@ class ProductCustomFields extends Module
         return $this->hooks;
     }
 
-    public function HookActionProductUpdate($params){
-        
-            
+    public function HookActionProductUpdate($params):void
+    {
+           
         $id_product = (int)Tools::getValue('id_product');
-        $data = ProductCustomField::getCustomProductTabsByProductID($id_product);
 
-        $id_pcf = null;
-        if( isset($data[0]) &&  !empty($data[0]) ){
-            $id_pcf = (int) $data[0]['id_pcf'];
+        if(!$id_product){
+            return;
         }
 
+        $data = ProductCustomField::getProductCustomFieldsByProductID($id_product);
+
         $pcf = new ProductCustomField();
-        $pcf->id_pcf = $id_pcf;
+
+        if( isset($data[0]) &&  !empty($data[0]) ){
+            $pcf->id_pcf = (int) $data[0]['id_pcf'];
+            $pcf->created_at = $data[0]['created_at'];
+        }
+
         $pcf->id_product = $id_product;
 
         $pcf->custom_field_a = Tools::getValue('product_custom_field_a');
@@ -135,18 +139,38 @@ class ProductCustomFields extends Module
     {
         
         $id_product = (int)Tools::getValue('id_product');
-        //$this->product = new Product((int)$id_product);
-
-        $data = ProductCustomField::getCustomProductTabsByProductID($id_product);  
+        $data = ProductCustomField::getProductCustomFieldsByProductID($id_product);  
     
-        if(isset($data[0])){
+        if(isset($data[0]) && !empty($data[0])){
             $this->context->smarty->assign('pcf', $data[0]);
             $this->context->controller->addCSS($this->_path.'views/css/productcustomfields.css');
         }
 
-        //$this->context->smarty->assign('product', $this->product);
+        $this->context->smarty->assign('device', $this->getDevice());
+    
+        return $this->display(__FILE__, 'fields.tpl');
+    }
+
+    //display tab in admin product
+    public function hookDisplayAdminProductsExtra($params):string
+    {
+
+        $id_product = (int)Tools::getValue('id_product');
+        if(!$id_product){
+            return 'Please select a product!';
+        }
         
-        
+        $data = ProductCustomField::getProductCustomFieldsByProductID($id_product);   
+
+        if(isset($data[0])){
+            $this->context->smarty->assign('pcf', $data[0]);
+        }
+
+        return $this->display(__FILE__, 'productcustomfields.tpl');
+    }
+
+    public function getDevice():string
+    {
         switch ( $this->context->getDevice() ){
             case 1:
                 $device = 'computer';
@@ -161,24 +185,7 @@ class ProductCustomFields extends Module
                 $device = 'computer';
         }
 
-        $this->context->smarty->assign('device', $device);
-    
-        return $this->display(__FILE__, 'fields.tpl');
-    }
-
-    //display tab in admin product
-    public function hookDisplayAdminProductsExtra($params){
-
-        $id_product = (int)Tools::getValue('id_product');
-       
-        
-        $data = ProductCustomField::getCustomProductTabsByProductID($id_product);   
-
-        if(isset($data[0])){
-            $this->context->smarty->assign('pcf', $data[0]);
-        }
-
-        return $this->display(__FILE__, 'productcustomfields.tpl');
+        return $device;
     }
 
     public function run_sql_queries(string $path = self::INSTALL_SQL_FILE):bool
@@ -193,8 +200,6 @@ class ProductCustomFields extends Module
         //_MYSQL_ENGINE_
         $sql = str_replace(array('PREFIX_', 'DBNAME_','MYSQL_ENGINE'), array(_DB_PREFIX_, _DB_NAME_,_MYSQL_ENGINE_), $sql);
         $sql = preg_split("/;\s*[\r\n]+/", $sql);
-
-        file_put_contents( __DIR__ . '/test.sql',json_encode($sql));
 
         foreach ($sql as $query) {
             if ($query) {
@@ -211,11 +216,4 @@ class ProductCustomFields extends Module
         return true;
     }
 
-    /*
-    public function getContent(){
-        return 'hello from Module';
-    }*/
-
 }
-
-
