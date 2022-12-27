@@ -12,8 +12,8 @@
     <div class="form-group">
         <div class="col-lg-12">
         <label class="control-label col-lg-3" for="product_custom_field_a">
-            <span class="label-tooltip" data-toggle="tooltip" title="{l s='Custom string 1'}">
-                {l s='Custom string 1'}
+            <span class="label-tooltip" data-toggle="tooltip" title="{l s='Custom string (desktop,tablet,mobile)'}">
+                {l s='Custom string (desktop, tablet, mobile'}
             </span>
         </label>
         <div class="col-lg-5">
@@ -25,8 +25,8 @@
     <div class="form-group">
         <div class="col-lg-12">
         <label class="control-label col-lg-3" for="product_custom_field_b">
-            <span class="label-tooltip" data-toggle="tooltip" title="{l s='Custom string 2'}">
-                {l s='Custom string 2'}
+            <span class="label-tooltip" data-toggle="tooltip" title="{l s='Custom string (desktop,tablet)'}">
+                {l s='Custom string (desktop,tablet)'}
             </span>
         </label>
         <div class="col-lg-5">
@@ -38,8 +38,8 @@
     <div class="form-group">
         <div class="col-lg-12">
         <label class="control-label col-lg-3" for="product_custom_field_c">
-            <span class="label-tooltip" data-toggle="tooltip" title="{l s='Custom string 3'}">
-                {l s='Custom string 3'}
+            <span class="label-tooltip" data-toggle="tooltip" title="{l s='Custom string (desktop)'}">
+                {l s='Custom string (desktop)'}
             </span>
         </label>
         <div class="col-lg-5">
