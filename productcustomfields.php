@@ -114,7 +114,7 @@ class ProductCustomFields extends Module
 
         $pcf = new ProductCustomField();
 
-        if( isset($data[0]) &&  !empty($data[0]) ){
+        if ( isset($data[0]) &&  !empty($data[0]) ){
             $pcf->id_pcf = (int) $data[0]['id_pcf'];
             $pcf->created_at = $data[0]['created_at'];
         }
@@ -125,9 +125,9 @@ class ProductCustomFields extends Module
         $pcf->custom_field_b = Tools::getValue('product_custom_field_b');
         $pcf->custom_field_c = Tools::getValue('product_custom_field_c');
         
-        try{
+        try {
             $pcf->save();
-        } catch( PrestaShopDatabaseException $ex ){
+        } catch ( PrestaShopDatabaseException $ex ){
             $ex->displayMessage();
             $this->context->smarty->assign('pcf_add_new_field', 'error');
         }
@@ -141,7 +141,7 @@ class ProductCustomFields extends Module
         $id_product = (int)Tools::getValue('id_product');
         $data = ProductCustomField::getProductCustomFieldsByProductID($id_product);  
     
-        if(isset($data[0]) && !empty($data[0])){
+        if (isset($data[0]) && !empty($data[0])){
             $this->context->smarty->assign('pcf', $data[0]);
             $this->context->controller->addCSS($this->_path.'views/css/productcustomfields.css');
         }
@@ -156,7 +156,7 @@ class ProductCustomFields extends Module
     {
 
         $id_product = (int)Tools::getValue('id_product');
-        if(!$id_product){
+        if (!$id_product){
             return 'Please select a product!';
         }
         
@@ -166,7 +166,7 @@ class ProductCustomFields extends Module
             $this->context->smarty->assign('pcf', $data[0]);
         }
 
-        return $this->display(__FILE__, 'productcustomfields.tpl');
+        return $this->display(__FILE__, 'views/templates/admin/productcustomfields.tpl');
     }
 
     public function getDevice():string
